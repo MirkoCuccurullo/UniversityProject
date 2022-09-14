@@ -8,8 +8,8 @@ public class Teacher extends Person{
     public double getSalary(){
         return  salary;
     }
-    public Teacher(String firstName, String lastName, int ID, LocalDate birthDate, int age, double salary, String username, String password){
-        super(firstName, lastName, ID, birthDate, age);
+    public Teacher(String firstName, String lastName, int ID, LocalDate birthDate, double salary, String username, String password){
+        super(firstName, lastName, ID, birthDate);
         this.salary = salary;
         this.setUsername(username);
         this.setPassword(password);

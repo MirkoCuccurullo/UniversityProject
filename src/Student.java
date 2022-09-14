@@ -5,8 +5,8 @@ import java.util.Date;
 public class Student extends Person{
     private String group;
 
-    public Student(String firstName, String lastName, int ID, LocalDate birthDate, int age, String group, String username, String password){
-        super(firstName, lastName, ID, birthDate, age);
+    public Student(String firstName, String lastName, int ID, LocalDate birthDate, String group, String username, String password){
+        super(firstName, lastName, ID, birthDate);
         this.group = group;
         this.setUsername(username);
         this.setPassword(password);

@@ -10,12 +10,12 @@ public abstract class Person {
     private String username;
     private String password;
 
-    public Person(String firstName, String lastName, int ID, LocalDate birthDate, int age){
+    public Person(String firstName, String lastName, int ID, LocalDate birthDate){
         this.firstName = firstName;
         this.lastName = lastName;
         this.ID = ID;
         setBirthDate(birthDate);
-        this.age = age;
+        this.age = setAge(this.birthDate);
     }
 
 
@@ -29,6 +29,10 @@ public abstract class Person {
 
     public int getID(){
         return ID;
+    }
+
+    public int setAge(LocalDate date){
+        return date.getYear() - LocalDate.now().getYear();
     }
 
     public int getAge(){
