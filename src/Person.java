@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public abstract class Person {
     private String firstName;
@@ -6,16 +7,20 @@ public abstract class Person {
     private int ID;
     private LocalDate birthDate;
     private int age;
-
     private String username;
     private String password;
 
-    public Person(String firstName, String lastName, int ID, LocalDate birthDate){
+    public Person(String firstName, String lastName, int ID, String birthDate){
         this.firstName = firstName;
         this.lastName = lastName;
         this.ID = ID;
         setBirthDate(birthDate);
         this.age = setAge(this.birthDate);
+    }
+
+    public LocalDate getBirthDate(){
+
+        return this.birthDate;
     }
 
 
@@ -32,7 +37,7 @@ public abstract class Person {
     }
 
     public int setAge(LocalDate date){
-        return date.getYear() - LocalDate.now().getYear();
+        return LocalDate.now().getYear() - date.getYear();
     }
 
     public int getAge(){
@@ -53,11 +58,11 @@ public abstract class Person {
         this.username = username;
     }
 
-    public LocalDate getBirthDate(){
-        return getBirthDate();
-    }
 
-    public void setBirthDate(LocalDate date){
+    public void setBirthDate(String dateString) {
+
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate date = LocalDate.parse(dateString, dateTimeFormatter);
         this.birthDate = date;
     }
 
