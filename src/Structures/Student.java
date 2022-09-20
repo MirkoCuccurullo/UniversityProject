@@ -1,20 +1,22 @@
-public class Student extends Person{
+package Structures;
+
+
+import java.time.LocalDate;
+
+public class Student extends Person {
     private String group;
     private int[] grades = new int[4];
     private boolean hasPassed = true;
-    private int numberOfRetakes;
 
 
-    public Student(String firstName, String lastName, int ID, String birthDate, String group, String username, String password){
+
+    public Student(String firstName, String lastName, int ID, LocalDate birthDate, String group, String username, String password){
         super(firstName, lastName, ID, birthDate);
         this.group = group;
         this.setUsername(username);
         this.setPassword(password);
     }
 
-    public String getGroup(){
-        return group;
-    }
     public int getGrade(String subjectName){
         switch (subjectName){
             case "Java":
@@ -63,13 +65,13 @@ public class Student extends Person{
     }
 
     public String getHasPassedAsString(){
-        for (int grade : grades){
-            if (grade < 55){
-                hasPassed = false;
-                break;
+
+        for (int i = 0; i < grades.length; i++) {
+            if (grades[i] < 55){
+                this.hasPassed = false;
             }
         }
-        if (hasPassed){
+        if (this.hasPassed){
             return "Passed";
         }
         else{

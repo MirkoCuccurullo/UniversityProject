@@ -1,5 +1,7 @@
+package Structures;
+
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.time.Period;
 
 public abstract class Person {
     private String firstName;
@@ -10,11 +12,11 @@ public abstract class Person {
     private String username;
     private String password;
 
-    protected Person(String firstName, String lastName, int ID, String birthDate){
+    protected Person(String firstName, String lastName, int ID, LocalDate birthDate){
         this.firstName = firstName;
         this.lastName = lastName;
         this.ID = ID;
-        setBirthDate(birthDate);
+        this.birthDate = birthDate;
         this.age = setAge(this.birthDate);
     }
 
@@ -31,7 +33,7 @@ public abstract class Person {
     }
 
     private int setAge(LocalDate date){
-        return LocalDate.now().getYear() - date.getYear();
+        return Period.between(LocalDate.now(), date).getYears();
     }
 
     public int getAge(){
@@ -51,15 +53,11 @@ public abstract class Person {
         this.username = username;
     }
 
-    public void setBirthDate(String dateString) {
-
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        this.birthDate = LocalDate.parse(dateString, dateTimeFormatter);
-    }
 @Override
     public String toString(){
         return ID + "         " + firstName + "             " + lastName +
                 "       " + birthDate + "      " + age;
     }
+
 
 }
