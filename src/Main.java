@@ -9,7 +9,7 @@ public class Main {
 
         Person currentUser;
 
-        Database DB = new Database();
+        Database DB = Database.getInstance();
 
         Scanner scanner = new Scanner(System.in);
 
@@ -26,6 +26,7 @@ public class Main {
                 UI.displayView(DB.getPersons(),currentUser);
             }
         }
+
         scanner.close();
         System.out.println("Program closed.");
     }

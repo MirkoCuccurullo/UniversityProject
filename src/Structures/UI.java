@@ -11,6 +11,7 @@ public class UI {
     public static void displayView(List<Person> persons, Person currentUser){
 
         Scanner scanner = new Scanner(System.in);
+        Database db = Database.getInstance();
 
         while (true){
             displayMainMenu(currentUser);
@@ -20,11 +21,11 @@ public class UI {
 
             if (choice.equalsIgnoreCase("S")) {
 
-                displayStudentsForStudents(persons);
+                displayStudents(currentUser);
 
             } else if (choice.equalsIgnoreCase("T")) {
 
-                displayListOfTeacherForStudents(persons);
+                displayListOfTeacher(currentUser);
 
             } else if (choice.equalsIgnoreCase("A") && currentUser.getClass() != Student.class) {
 
@@ -32,7 +33,7 @@ public class UI {
 
             } else if (choice.equalsIgnoreCase("R") && currentUser.getClass() != Student.class) {
 
-                displayReportView(persons, currentUser);
+                displayReportView(db.getPersons(), currentUser);
 
             } else if (choice.equalsIgnoreCase("x")) {
                 break;
@@ -144,20 +145,87 @@ public class UI {
 
     }
 
-    private static void displayListOfTeacherForStudents(List<Person> persons){
+    private static void displayListOfTeacher(Person currentUser){
+
+        Scanner scanner = new Scanner(System.in);
+        Database db = Database.getInstance();
+        List<Teacher> teachers = db.returnTeacherList();
 
         System.out.println("LIST OF TEACHERS");
         System.out.println();
         System.out.println("ID:       First Name:       Last Name:       Birthday:       Age:       ");
         System.out.println("**        ***** *****       **** *****       *********       ****       ");
 
-        for (Person p : persons){
-            if (p.getClass() == Teacher.class) {
-                Teacher teacher = (Teacher) p;
-                System.out.println(teacher);
-            }
+        for (Teacher t : teachers) {
+
+            System.out.println(t);
+
         }
         System.out.println();
+
+        if (currentUser.getClass() == Manager.class){
+
+            managerFunctionforTeacher();
+        }
+
+    }
+
+    private static void managerFunctionforTeacher(){
+
+        Scanner scanner = new Scanner(System.in);
+        Database db = Database.getInstance();
+
+        System.out.print("1.ADD TEACHER   |   2.DELETE TEACHER   | 3.BACK");
+        System.out.println();
+        System.out.println("insert menu number: ");
+        int answer = scanner.nextInt();
+
+        switch (answer){
+            case 1:
+                addTeacher();
+                break;
+            case 2:
+                System.out.print("Insert ID: ");
+                int idToDelete = scanner.nextInt();
+                db.deleteByID(idToDelete);
+                break;
+            case 3:
+                return;
+            default: break;
+        }
+    }
+
+    private static void addTeacher(){
+        try {
+            Scanner scanner = new Scanner(System.in);
+            Database db = Database.getInstance();
+            List<Person> personList = db.getPersons();
+            System.out.println("ADD TEACHER");
+            System.out.println();
+            System.out.print("choose a username: ");
+            String username = scanner.next();
+            System.out.print("choose a password: ");
+            String password = scanner.next();
+            System.out.print("Enter first name: ");
+            String firstName = scanner.next();
+            System.out.print("Enter last name: ");
+            String lastName = scanner.next();
+            System.out.print("please enter date of birth in (DD/MM/YY): ");
+            String dateString = scanner.next();
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate birthDate = LocalDate.parse(dateString, dateTimeFormatter);
+
+
+            System.out.print("Enter salary: ");
+            int salary = scanner.nextInt();
+
+            personList.add(new Teacher(firstName, lastName, personList.size() + 1, birthDate, salary, username, password));
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        System.out.println("The data was successfully added!");
     }
 
     private static void displayMainMenu(Person currentUser){
@@ -170,20 +238,33 @@ public class UI {
         }
 
     }
-    private static void displayStudentsForStudents(List<Person> persons){
+    private static void displayStudents(Person currentUser){
+
+        Database db = Database.getInstance();
+        List<Student> students = db.returnStudentsList();
+        Scanner scanner = new Scanner(System.in);
 
         System.out.println("LIST OF STUDENTS");
         System.out.println();
         System.out.println("ID:       First Name:       Last Name:       Birthday:       Age:       Group:       ");
         System.out.println("**        ***** *****       **** *****       *********       ****       ******");
 
-        for (Person p : persons){
-            if (p.getClass() == Student.class) {
-                Student student = (Student)p;
-                System.out.println(student);
-            }
+        for (Student s : students){
+            System.out.println(s);
         }
         System.out.println();
+
+        if (currentUser.getClass() == Manager.class){
+
+            System.out.print("delete student? (y/n)");
+            String answer = scanner.next();
+
+            if (answer.equalsIgnoreCase("y")){
+                System.out.print("Insert ID: ");
+                int idToDelete = scanner.nextInt();
+                db.deleteByID(idToDelete);
+            }
+        }
     }
     private static void addGradesToReport(Student student){
 
@@ -211,17 +292,18 @@ public class UI {
     private static void selectionOfMenu(String selection, Student student, List<Person> persons, Person currentUser){
 
         Scanner scanner = new Scanner(System.in);
+        Database db = Database.getInstance();
         if (selection.equalsIgnoreCase("a")) {
 
             addGradesToReport(student);
             System.out.print("please enter a choice, select a menu: ");
             String newSelection = scanner.next();
-            selectionOfMenu(newSelection, student,persons, currentUser);
+            selectionOfMenu(newSelection, student,db.getPersons(), currentUser);
 
         } else if (selection.equalsIgnoreCase("r")) {
-            displayReportView(persons, currentUser);
+            displayReportView(db.getPersons(), currentUser);
         } else if (selection.equalsIgnoreCase("b")) {
-            displayView(persons,currentUser);
+            displayView(db.getPersons(),currentUser);
 
         } else if (selection.equalsIgnoreCase("x")) {
 
